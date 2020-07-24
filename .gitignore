@@ -1,0 +1,38 @@
+### VSCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+
+# Dump file
+*.stackdump
+
+# Windows shortcuts
+*.lnk
+
+### MacOS ###
+# General
+.DS_Store
+
+# Thumbnails
+._*
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Jupyter Notebook
+.ipynb_checkpoints
