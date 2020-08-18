@@ -10,6 +10,10 @@
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
+  metaInfo: {
+    title: "",
+    titleTemplate: "評価型ニュースサイト"
+  }
 };
 </script>
