@@ -1,10 +1,36 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
+  <div id="app" class="wrapper">
+    <header class="header">
+      <div class="header__inner">
+        <div class="header__logo">
+          <img
+            srcset="@/assets/logo@2x.png 2x, @/assets/logo.png 1x"
+            src="@/assets/logo.png"
+            alt=""
+          />
+        </div>
+        <nav class="header__nav">
+          <ul class="header__nav-list">
+            <li class="header__nav-item">
+              <router-link to="/" class="header__nav-link">Home</router-link>
+            </li>
+            <li class="header__nav-item">
+              <router-link to="/about" class="header__nav-link"
+                >About</router-link
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <router-view />
+    </main>
+    <footer class="footer">
+      <div class="footer__inner">
+        <p class="footer__copyright">© 2020 7班</p>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -26,10 +52,54 @@ body {
   font-family: "游ゴシック", YuGothic, "Hiragino Sans",
     "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
   font-size: 1.6rem;
-  font-weight: 700;
   color: #333;
   -webkit-font-feature-settings: "palt";
   font-feature-settings: "palt";
   -webkit-font-smoothing: antialiased;
+}
+</style>
+
+<style lang="scss" scoped>
+.wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.header {
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4rem 0;
+  }
+  &__nav {
+    &-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    &-item {
+      margin-left: 4rem;
+      font-size: 1.8rem;
+    }
+    &-link {
+      color: #409eff;
+      text-decoration: none;
+      opacity: 0.6;
+
+      &:hover,
+      &.router-link-exact-active {
+        opacity: 1;
+      }
+    }
+  }
+}
+.footer {
+  text-align: center;
+
+  &__inner {
+    padding: 4rem 0;
+  }
 }
 </style>
