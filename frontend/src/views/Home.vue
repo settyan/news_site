@@ -113,7 +113,6 @@ export default {
     margin: 0;
     font-size: 2rem;
     overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
@@ -121,6 +120,9 @@ export default {
     display: flex;
     align-items: center;
     margin: 1rem 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__author,
