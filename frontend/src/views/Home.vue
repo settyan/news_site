@@ -9,17 +9,28 @@
             </div>
             <div class="card__inner">
               <h2 class="card__title">{{ article.title }}</h2>
+              <div class="card__meta">
+                <p class="card__author" v-if="article.author">
+                  <i class="el-icon-user"></i><span>{{ article.author }}</span>
+                </p>
+                <p class="card__date">
+                  <i class="el-icon-date"></i
+                  ><span>{{ time(article.publishedAt) }}</span>
+                </p>
+              </div>
               <p class="card__excerpt">{{ article.description }}</p>
             </div>
           </el-card>
         </div>
       </el-col>
     </el-row>
-    <div v-else>Fuck</div>
+    <div v-else>Now searching fucking hard...</div>
   </div>
 </template>
 
 <script>
+import moment from "moment";
+
 export default {
   name: "Home",
   metaInfo: {
@@ -33,6 +44,11 @@ export default {
   computed: {
     isLoading: function() {
       return this.articles.length > 0;
+    }
+  },
+  methods: {
+    time: function(time) {
+      return moment(time).format("YYYY/MM/DD");
     }
   },
   created() {
@@ -71,19 +87,38 @@ export default {
   }
 
   &__title {
-    margin: 0 0 1rem;
+    margin: 0;
     font-size: 2rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
+  &__meta {
+    display: flex;
+    align-items: center;
+    margin: 1rem 0 0;
+  }
+
+  &__author,
+  &__date {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    opacity: 0.6;
+    margin: 0 1rem 0 0;
+
+    i {
+      margin-right: 0.6rem;
+    }
+  }
+
   &__excerpt {
-    margin: 0;
     color: #888;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin: 1.6rem 0 0;
   }
 }
 </style>
