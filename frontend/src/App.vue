@@ -3,11 +3,13 @@
     <header class="header">
       <div class="header__inner">
         <div class="header__logo">
-          <img
-            srcset="@/assets/logo@2x.png 2x, @/assets/logo.png 1x"
-            src="@/assets/logo.png"
-            alt=""
-          />
+          <router-link to="/">
+            <img
+              srcset="@/assets/logo@2x.png 2x, @/assets/logo.png 1x"
+              src="@/assets/logo.png"
+              alt=""
+            />
+          </router-link>
         </div>
         <nav class="header__nav">
           <ul class="header__nav-list">

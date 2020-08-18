@@ -1,33 +1,40 @@
 <template>
-  <div class="home">
+  <div class="root">
     <div v-if="isLoading">Now searching fucking hard...</div>
     <div v-else>
       <el-row :gutter="40">
-        <el-col :span="8" v-for="(article, index) in articles" :key="index">
+        <el-col
+          :span="8"
+          v-for="(article, index) in articles"
+          :key="index"
+          class="col"
+        >
           <div class="card">
-            <el-card :body-style="{ padding: '0px' }">
-              <div class="card__imgbox">
-                <el-image
-                  style="width: 100%; height: 24rem"
-                  :src="article.urlToImage"
-                  fit="cover"
-                  lazy
-                ></el-image>
-              </div>
-              <div class="card__inner">
-                <h2 class="card__title">{{ article.title }}</h2>
-                <div class="card__meta">
-                  <p class="card__date">
-                    <i class="el-icon-date"></i
-                    ><span>{{ time(article.publishedAt) }}</span>
-                  </p>
-                  <p class="card__author">
-                    By.<span>{{ article.source.name }}</span>
-                  </p>
+            <router-link :to="`/items/${article.title}`" class="card__link">
+              <el-card :body-style="{ padding: '0px' }">
+                <div class="card__imgbox">
+                  <el-image
+                    style="width: 100%; height: 20rem"
+                    :src="article.urlToImage"
+                    fit="cover"
+                    lazy
+                  ></el-image>
                 </div>
-                <p class="card__excerpt">{{ article.description }}</p>
-              </div>
-            </el-card>
+                <div class="card__inner">
+                  <h2 class="card__title">{{ article.title }}</h2>
+                  <div class="card__meta">
+                    <p class="card__date">
+                      <i class="el-icon-date"></i
+                      ><span>{{ time(article.publishedAt) }}</span>
+                    </p>
+                    <p class="card__author">
+                      By.<span>{{ article.source.name }}</span>
+                    </p>
+                  </div>
+                  <p class="card__excerpt">{{ article.description }}</p>
+                </div>
+              </el-card>
+            </router-link>
           </div>
         </el-col>
       </el-row>
@@ -95,8 +102,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.col:nth-child(3n + 1) {
+  clear: both;
+}
 .card {
   margin-bottom: 4rem;
+
+  &__link {
+    color: inherit;
+    text-decoration: none;
+  }
 
   &__inner {
     padding: 2rem;
