@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "yorkie": "^2.0.0"
+  },
+  "gitHooks": {
+    "pre-commit": "cd frontend && node_modules/.bin/lint-staged"
+  }
+}

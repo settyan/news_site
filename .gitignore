@@ -36,3 +36,5 @@ __pycache__/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+node_modules
