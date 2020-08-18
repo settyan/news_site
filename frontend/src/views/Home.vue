@@ -70,10 +70,7 @@ export default {
     fetchArticles: function() {
       this.isLoading = true;
       fetch(
-        `${process.env.VUE_APP_API_URL}/v2/top-headlines?country=jp&apiKey=${process.env.VUE_APP_API_KEY}&pageSize=${this.pageSize}&page=${this.currentPage}`,
-        {
-          mode: "cors"
-        }
+        `${process.env.VUE_APP_API_URL}/v2/top-headlines?country=jp&apiKey=${process.env.VUE_APP_API_KEY}&pageSize=${this.pageSize}&page=${this.currentPage}`
       )
         .then(response => {
           return response.json();
