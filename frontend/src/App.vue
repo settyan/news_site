@@ -9,24 +9,18 @@
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+html {
+  font-size: 62.5%;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+body {
+  font-family: "游ゴシック", YuGothic, "Hiragino Sans",
+    "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #333;
+  -webkit-font-feature-settings: "palt";
+  font-feature-settings: "palt";
+  -webkit-font-smoothing: antialiased;
 }
 </style>
