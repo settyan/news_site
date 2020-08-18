@@ -12,7 +12,6 @@
 export default {
   name: "Home",
   metaInfo: {
-    title: "",
     titleTemplate: "評価型ニュースサイト"
   }
 };

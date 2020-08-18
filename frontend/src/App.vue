@@ -8,6 +8,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "App",
+  metaInfo: {
+    titleTemplate: "%s | 評価型ニュースサイト"
+  }
+};
+</script>
+
 <style lang="scss">
 html {
   font-size: 62.5%;
