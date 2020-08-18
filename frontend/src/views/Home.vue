@@ -10,12 +10,12 @@
             <div class="card__inner">
               <h2 class="card__title">{{ article.title }}</h2>
               <div class="card__meta">
-                <p class="card__author" v-if="article.author">
-                  <i class="el-icon-user"></i><span>{{ article.author }}</span>
-                </p>
                 <p class="card__date">
                   <i class="el-icon-date"></i
                   ><span>{{ time(article.publishedAt) }}</span>
+                </p>
+                <p class="card__author">
+                  By.<span>{{ article.source.name }}</span>
                 </p>
               </div>
               <p class="card__excerpt">{{ article.description }}</p>
