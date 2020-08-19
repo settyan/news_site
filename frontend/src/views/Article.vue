@@ -15,7 +15,7 @@
             </p>
           </div>
         </header>
-        <div class="article__img">
+        <div class="article__imgbox">
           <PuSkeleton height="40rem" />
         </div>
         <div class="article__content">
@@ -86,7 +86,7 @@ export default {
     fetchArticles: function() {
       this.isLoading = true;
       fetch(
-        `${process.env.VUE_APP_API_URL}/v2/everything?apiKey=${process.env.VUE_APP_API_KEY}&qInTitle="${this.title}"`
+        `${process.env.VUE_APP_PROXY_URL}/${process.env.VUE_APP_API_URL}/v2/everything?apiKey=${process.env.VUE_APP_API_KEY}&qInTitle="${this.title}"`
       )
         .then(response => {
           return response.json();
