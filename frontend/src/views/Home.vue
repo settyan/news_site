@@ -158,11 +158,8 @@ export default {
     padding: 2rem;
   }
 
-  &__img {
-    width: 100%;
-    height: 20rem;
-    object-fit: cover;
-    object-position: center;
+  &__imgbox {
+    line-height: 1;
   }
 
   &__title {
