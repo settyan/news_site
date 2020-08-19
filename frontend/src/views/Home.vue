@@ -2,11 +2,11 @@
   <div class="root">
     <template v-if="isLoading">
       <el-row :gutter="40">
-        <el-col :span="8" v-for="index in 6" :key="index" class="col">
+        <el-col :sm="12" :lg="8" v-for="index in 6" :key="index" class="col">
           <div class="card">
             <el-card :body-style="{ padding: '0px' }">
               <div class="card__imgbox">
-                <PuSkeleton height="20rem" />
+                <PuSkeleton class="card__img" />
               </div>
               <div class="card__inner">
                 <h2 class="card__title"><PuSkeleton /></h2>
@@ -41,7 +41,8 @@
     <template v-else>
       <el-row :gutter="40">
         <el-col
-          :span="8"
+          :sm="12"
+          :lg="8"
           v-for="(article, index) in articles"
           :key="index"
           class="col"
@@ -51,7 +52,7 @@
               <el-card :body-style="{ padding: '0px' }">
                 <div class="card__imgbox">
                   <el-image
-                    style="width: 100%; height: 20rem"
+                    class="card__img"
                     :src="article.urlToImage"
                     fit="cover"
                     lazy
@@ -143,8 +144,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.col:nth-child(3n + 1) {
-  clear: both;
+.col {
+  &:nth-child(3n + 1) {
+    clear: both;
+
+    @media screen and (max-width: 1199px) {
+      clear: none;
+    }
+  }
+  &:nth-child(2n + 1) {
+    @media screen and (max-width: 1199px) {
+      clear: both;
+    }
+    @media screen and (max-width: 767px) {
+      clear: none;
+    }
+  }
 }
 .card {
   margin-bottom: 4rem;
@@ -160,6 +175,16 @@ export default {
 
   &__imgbox {
     line-height: 1;
+    padding-top: 64%;
+    position: relative;
+  }
+
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   &__title {

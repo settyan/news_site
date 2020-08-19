@@ -65,6 +65,10 @@ body {
 .wrapper {
   max-width: 1000px;
   margin: 0 auto;
+
+  @media screen and (max-width: 1200px) {
+    padding: 0 20px;
+  }
 }
 .header {
   &__inner {
@@ -72,6 +76,17 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 4rem 0;
+
+    @media screen and (max-width: 767px) {
+      padding: 3.2rem 0;
+    }
+  }
+  &__logo {
+    img {
+      @media screen and (max-width: 767px) {
+        width: 6.8rem;
+      }
+    }
   }
   &__nav {
     &-list {
@@ -84,6 +99,10 @@ body {
     &-item {
       margin-left: 4rem;
       font-size: 1.8rem;
+
+      @media screen and (max-width: 767px) {
+        font-size: 1.6rem;
+      }
     }
     &-link {
       color: #409eff;
@@ -102,6 +121,10 @@ body {
 
   &__inner {
     padding: 4rem 0;
+
+    @media screen and (max-width: 767px) {
+      padding: 3.2rem 0;
+    }
   }
 }
 </style>

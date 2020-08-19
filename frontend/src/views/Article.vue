@@ -16,7 +16,7 @@
           </div>
         </header>
         <div class="article__imgbox">
-          <PuSkeleton height="40rem" />
+          <PuSkeleton class="article__img" />
         </div>
         <div class="article__content">
           <PuSkeleton height="6rem" />
@@ -35,9 +35,9 @@
           <p class="article__author">By.{{ article.source.name }}</p>
         </div>
       </header>
-      <div class="article__img">
+      <div class="article__imgbox">
         <el-image
-          style="width: 100%; height: 40rem"
+          class="article__img"
           :src="article.urlToImage"
           fit="cover"
           lazy
@@ -113,6 +113,10 @@ export default {
 .article {
   padding: 0 12rem;
 
+  @media screen and (max-width: 767px) {
+    padding: 0;
+  }
+
   &__header {
     margin-bottom: 4rem;
   }
@@ -136,6 +140,19 @@ export default {
     i {
       margin-right: 0.6rem;
     }
+  }
+
+  &__imgbox {
+    padding-top: 64%;
+    position: relative;
+  }
+
+  &__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
   &__content {
