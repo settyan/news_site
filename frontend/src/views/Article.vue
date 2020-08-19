@@ -1,19 +1,41 @@
 <template>
   <div class="root">
-    <div class="article">
+    <template v-if="isLoading">
+      <div class="article">
+        <header class="article__header">
+          <h2>
+            <PuSkeleton height="4rem" />
+          </h2>
+          <div class="article__meta">
+            <p class="article__date">
+              <PuSkeleton width="6rem" />
+            </p>
+            <p class="article__author">
+              <PuSkeleton width="6rem" />
+            </p>
+          </div>
+        </header>
+        <div class="article__img">
+          <PuSkeleton height="40rem" />
+        </div>
+        <div class="article__content">
+          <PuSkeleton height="6rem" />
+        </div>
+      </div>
+    </template>
+    <div v-else class="article">
       <header class="article__header">
-        <h2>{{ article.title }}</h2>
+        <h2>
+          {{ article.title }}
+        </h2>
         <div class="article__meta">
           <p class="article__date">
-            <i class="el-icon-date"></i
-            ><span>{{ time(article.publishedAt) }}</span>
+            <i class="el-icon-date"></i>{{ time(article.publishedAt) }}
           </p>
-          <p class="article__author">
-            By.<span>{{ article.source.name }}</span>
-          </p>
+          <p class="article__author">By.{{ article.source.name }}</p>
         </div>
       </header>
-      <div>
+      <div class="article__img">
         <el-image
           style="width: 100%; height: 40rem"
           :src="article.urlToImage"
@@ -21,13 +43,19 @@
           lazy
         ></el-image>
       </div>
-      <div class="article__content" v-html="article.content"></div>
+      <div class="article__content">
+        <template v-html="article.content"></template>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import moment from "moment";
+import Skeleton from "vue-loading-skeleton";
+
+Vue.use(Skeleton);
 
 export default {
   name: "Article",

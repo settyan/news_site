@@ -1,7 +1,44 @@
 <template>
   <div class="root">
-    <div v-if="isLoading">Now searching fucking hard...</div>
-    <div v-else>
+    <template v-if="isLoading">
+      <el-row :gutter="40">
+        <el-col :span="8" v-for="index in 6" :key="index" class="col">
+          <div class="card">
+            <el-card :body-style="{ padding: '0px' }">
+              <div class="card__imgbox">
+                <PuSkeleton height="20rem" />
+              </div>
+              <div class="card__inner">
+                <h2 class="card__title"><PuSkeleton /></h2>
+                <div class="card__meta">
+                  <p class="card__date">
+                    <PuSkeleton width="6rem" />
+                  </p>
+                  <p class="card__author">
+                    <PuSkeleton width="6rem" />
+                  </p>
+                </div>
+                <p class="card__excerpt">
+                  <PuSkeleton />
+                </p>
+              </div>
+            </el-card>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="pagenation">
+        <el-pagination
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="totalResults"
+          :current-page.sync="currentPage"
+          hide-on-single-page
+          @current-change="fetchArticles"
+        >
+        </el-pagination>
+      </div>
+    </template>
+    <template v-else>
       <el-row :gutter="40">
         <el-col
           :span="8"
@@ -49,12 +86,16 @@
         >
         </el-pagination>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
 import moment from "moment";
+import Skeleton from "vue-loading-skeleton";
+
+Vue.use(Skeleton);
 
 export default {
   name: "Home",
