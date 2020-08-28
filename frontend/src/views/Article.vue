@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <template v-if="isLoading">
+    <template v-if="isLoadingHeadline">
       <div class="article">
         <header class="article__header">
           <h2>
@@ -67,44 +67,36 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      isLoading: true,
-      article: null
+      isLoading: true
     };
-  },
-  computed: {
-    title: function() {
-      return this.id.match(/(.*) - /)[1];
-    },
-    source: function() {
-      return this.id.match(/ - (.*)/)[1];
-    }
   },
   methods: {
     time: function(time) {
       return moment(time).format("YYYY/MM/DD");
+    }
+  },
+  computed: {
+    isLoadingHeadline() {
+      return this.$store.getters.getIsLoadingHeadline;
     },
-    fetchArticles: function() {
-      this.isLoading = true;
-      fetch(
-        `${process.env.VUE_APP_PROXY_URL}/${process.env.VUE_APP_API_URL}/v2/everything?apiKey=${process.env.VUE_APP_API_KEY}&qInTitle="${this.title}"`
-      )
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          this.article = json.articles[0];
-          this.isLoading = false;
-        })
-        .catch(err => {
-          this.$message({
-            message: err,
-            type: "error"
-          });
-        });
+    headlineSize() {
+      return this.$store.getters.getHeadlineSize;
+    },
+    headline() {
+      return this.$store.getters.getHeadline;
+    },
+    article() {
+      return this.headline.find(article => article.title === this.id);
     }
   },
   created() {
-    this.fetchArticles();
+    this.headlineSize < 1 &&
+      this.$store.dispatch("fetchHeadline").catch(err => {
+        this.$message({
+          message: err,
+          type: "error"
+        });
+      });
   }
 };
 </script>

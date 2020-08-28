@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <template v-if="isLoading">
+    <template v-if="isLoadingHeadline">
       <el-row :gutter="40">
         <el-col :sm="12" :lg="8" v-for="index in 6" :key="index" class="col">
           <div class="card">
@@ -26,17 +26,6 @@
           </div>
         </el-col>
       </el-row>
-      <div class="pagenation">
-        <el-pagination
-          layout="prev, pager, next"
-          :page-size="pageSize"
-          :total="totalResults"
-          :current-page.sync="currentPage"
-          hide-on-single-page
-          @current-change="fetchArticles"
-        >
-        </el-pagination>
-      </div>
     </template>
     <template v-else>
       <el-row :gutter="40">
@@ -80,10 +69,10 @@
         <el-pagination
           layout="prev, pager, next"
           :page-size="pageSize"
-          :total="totalResults"
+          :total="headlineSize"
           :current-page.sync="currentPage"
           hide-on-single-page
-          @current-change="fetchArticles"
+          @current-change="handleCurrentChange"
         >
         </el-pagination>
       </div>
@@ -105,10 +94,7 @@ export default {
   },
   data() {
     return {
-      isLoading: true,
-      articles: [],
       pageSize: 15,
-      totalResults: 0,
       currentPage: 1
     };
   },
@@ -116,29 +102,38 @@ export default {
     time: function(time) {
       return moment(time).format("YYYY/MM/DD");
     },
-    fetchArticles: function() {
-      this.isLoading = true;
-      fetch(
-        `${process.env.VUE_APP_PROXY_URL}/${process.env.VUE_APP_API_URL}/v2/top-headlines?country=jp&apiKey=${process.env.VUE_APP_API_KEY}&pageSize=${this.pageSize}&page=${this.currentPage}`
-      )
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          this.totalResults = json.totalResults;
-          this.articles = json.articles;
-          this.isLoading = false;
-        })
-        .catch(err => {
-          this.$message({
-            message: err,
-            type: "error"
-          });
-        });
+    handleCurrentChange() {
+      scrollTo(0, 0);
+    }
+  },
+  computed: {
+    isLoadingHeadline() {
+      return this.$store.getters.getIsLoadingHeadline;
+    },
+    headlineSize() {
+      return this.$store.getters.getHeadlineSize;
+    },
+    headline() {
+      return this.$store.getters.getHeadline;
+    },
+    startPage() {
+      return this.pageSize * (this.currentPage - 1);
+    },
+    endPage() {
+      return this.pageSize * this.currentPage;
+    },
+    articles() {
+      return this.headline.slice(this.startPage, this.endPage);
     }
   },
   created() {
-    this.fetchArticles();
+    this.headlineSize < 1 &&
+      this.$store.dispatch("fetchHeadline").catch(err => {
+        this.$message({
+          message: err,
+          type: "error"
+        });
+      });
   }
 };
 </script>
