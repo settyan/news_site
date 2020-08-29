@@ -58,6 +58,7 @@ body {
   -webkit-font-feature-settings: "palt";
   font-feature-settings: "palt";
   -webkit-font-smoothing: antialiased;
+  word-break: break-all;
 }
 </style>
 

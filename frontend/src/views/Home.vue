@@ -42,7 +42,7 @@
                 <div class="card__imgbox">
                   <el-image
                     class="card__img"
-                    :src="article.urlToImage"
+                    :src="article.image"
                     fit="cover"
                     lazy
                   ></el-image>
@@ -100,7 +100,11 @@ export default {
   },
   methods: {
     time: function(time) {
-      return moment(time).format("YYYY/MM/DD");
+      time = time.replace(/(.*) UTC/, "$1");
+      return moment
+        .utc(time)
+        .local()
+        .format("YYYY/MM/DD");
     },
     handleCurrentChange() {
       scrollTo(0, 0);

@@ -38,13 +38,22 @@
       <div class="article__imgbox">
         <el-image
           class="article__img"
-          :src="article.urlToImage"
+          :src="article.image"
           fit="cover"
           lazy
         ></el-image>
       </div>
       <div class="article__content">
-        <template v-html="article.content"></template>
+        <p class="article__description">{{ article.description }}</p>
+        <p class="article__links">
+          <a
+            class="article__link"
+            :href="article.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ article.url }}</a
+          >
+        </p>
       </div>
     </div>
   </div>
@@ -72,7 +81,11 @@ export default {
   },
   methods: {
     time: function(time) {
-      return moment(time).format("YYYY/MM/DD");
+      time = time.replace(/(.*) UTC/, "$1");
+      return moment
+        .utc(time)
+        .local()
+        .format("YYYY/MM/DD");
     }
   },
   computed: {
@@ -149,6 +162,10 @@ export default {
 
   &__content {
     margin-top: 4rem;
+  }
+
+  &__link {
+    color: #409eff;
   }
 }
 </style>
