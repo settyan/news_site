@@ -32,7 +32,7 @@ export default new Vuex.Store({
     async fetchHeadline({ state, commit }) {
       commit("setIsLoadingHeadline", true);
       const response = await fetch(
-        `${process.env.VUE_APP_API_URL}/api/v3/top-news?token=${process.env.VUE_APP_API_KEY}&country=ja&max=${state.maxHeadlineSize}`
+        `${process.env.VUE_APP_PROXY_URL}/${process.env.VUE_APP_API_URL}/api/v3/top-news?token=${process.env.VUE_APP_API_KEY}&country=ja&max=${state.maxHeadlineSize}`
       );
       const json = await response.json();
       const headline = json.articles || [];
