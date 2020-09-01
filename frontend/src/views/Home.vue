@@ -139,7 +139,7 @@ export default {
     }
   },
   created() {
-    this.headlineSize < 1 &&
+    this.isLoadingHeadline &&
       this.$store.dispatch("fetchHeadline").catch(err => {
         this.$message({
           message: err,
