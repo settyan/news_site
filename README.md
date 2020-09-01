@@ -6,6 +6,12 @@
 パッケージをインストールします
 
 ```sh
+npm install
+cd frontend
+npm install
+
+# or
+
 yarn
 cd frontend
 yarn
