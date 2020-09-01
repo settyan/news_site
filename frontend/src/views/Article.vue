@@ -123,9 +123,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.article {
+.root {
   padding: 0 12rem;
+}
 
+.article {
   @media screen and (max-width: 767px) {
     padding: 0;
   }
