@@ -76,7 +76,8 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
-      isLoading: true
+      isLoading: true,
+      data: null
     };
   },
   methods: {
@@ -99,17 +100,18 @@ export default {
       return this.$store.getters.getHeadline;
     },
     article() {
-      return this.headline.find(article => article.title === this.id);
+      return this.headlineSize > 0
+        ? this.headline.find(article => article.title === this.id)
+        : this.data || [];
     }
   },
   created() {
     this.headlineSize < 1 &&
-      this.$store.dispatch("fetchHeadline").catch(err => {
-        this.$message({
-          message: err,
-          type: "error"
-        });
-      });
+      fetch(
+        `${process.env.VUE_APP_API_URL}/api/v3/search?token=${process.env.VUE_APP_API_KEY}&in=title&q=${this.id}`
+      )
+        .then(res => res.json())
+        .then(data => (this.data = data.articles[0]));
   }
 };
 </script>
