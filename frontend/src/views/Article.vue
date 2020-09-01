@@ -59,7 +59,7 @@
       </div>
     </template>
     <template>
-      <h2>記事が見つかりませんでした</h2>
+      <h2 class="title">記事が見つかりませんでした</h2>
     </template>
   </div>
 </template>

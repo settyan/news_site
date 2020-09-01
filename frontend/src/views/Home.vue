@@ -27,7 +27,7 @@
         </el-col>
       </el-row>
     </template>
-    <template v-else>
+    <template v-else-if="articles">
       <el-row :gutter="40">
         <el-col
           :sm="12"
@@ -81,6 +81,9 @@
         >
         </el-pagination>
       </div>
+    </template>
+    <template>
+      <h2 class="title">記事が見つかりませんでした</h2>
     </template>
   </div>
 </template>

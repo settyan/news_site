@@ -60,6 +60,15 @@ body {
   -webkit-font-smoothing: antialiased;
   word-break: break-all;
 }
+
+.title {
+  font-size: 4rem;
+  text-align: center;
+
+  @media screen and (max-width: 767px) {
+    font-size: 3.2rem;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
