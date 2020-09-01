@@ -102,7 +102,7 @@ export default {
     article() {
       return this.headlineSize > 0
         ? this.headline.find(article => article.title === this.id)
-        : this.data || [];
+        : this.data || null;
     }
   },
   created() {
