@@ -37,7 +37,12 @@
           class="col"
         >
           <div class="card">
-            <router-link :to="`/items/${article.title}`" class="card__link">
+            <router-link
+              :to="
+                `/items/${article.source.name}/${article.publishedAt}/${article.title}`
+              "
+              class="card__link"
+            >
               <el-card :body-style="{ padding: '0px' }">
                 <div class="card__imgbox">
                   <el-image

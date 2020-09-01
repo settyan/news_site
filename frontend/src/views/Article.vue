@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <template v-if="isLoadingHeadline">
+    <template v-if="isLoading">
       <div class="article">
         <header class="article__header">
           <h2>
@@ -23,39 +23,44 @@
         </div>
       </div>
     </template>
-    <div v-else class="article">
-      <header class="article__header">
-        <h2>
-          {{ article.title }}
-        </h2>
-        <div class="article__meta">
-          <p class="article__date">
-            <i class="el-icon-date"></i>{{ time(article.publishedAt) }}
-          </p>
-          <p class="article__author">By.{{ article.source.name }}</p>
+    <template v-else-if="article">
+      <div class="article">
+        <header class="article__header">
+          <h2>
+            {{ article.title }}
+          </h2>
+          <div class="article__meta">
+            <p class="article__date">
+              <i class="el-icon-date"></i>{{ time(article.publishedAt) }}
+            </p>
+            <p class="article__author">By.{{ article.source.name }}</p>
+          </div>
+        </header>
+        <div class="article__imgbox">
+          <el-image
+            class="article__img"
+            :src="article.image"
+            fit="cover"
+            lazy
+          ></el-image>
         </div>
-      </header>
-      <div class="article__imgbox">
-        <el-image
-          class="article__img"
-          :src="article.image"
-          fit="cover"
-          lazy
-        ></el-image>
+        <div class="article__content">
+          <p class="article__description">{{ article.description }}</p>
+          <p class="article__links">
+            <a
+              class="article__link"
+              :href="article.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              >{{ article.url }}</a
+            >
+          </p>
+        </div>
       </div>
-      <div class="article__content">
-        <p class="article__description">{{ article.description }}</p>
-        <p class="article__links">
-          <a
-            class="article__link"
-            :href="article.url"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ article.url }}</a
-          >
-        </p>
-      </div>
-    </div>
+    </template>
+    <template>
+      <h2>記事が見つかりませんでした</h2>
+    </template>
   </div>
 </template>
 
@@ -76,42 +81,43 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      author: this.$route.params.author,
       isLoading: true,
-      data: null
+      article: undefined
     };
   },
   methods: {
-    time: function(time) {
-      time = time.replace(/(.*) UTC/, "$1");
+    time(time) {
+      const newTime = time.replace(/(.*) UTC/, "$1");
       return moment
-        .utc(time)
+        .utc(newTime)
         .local()
         .format("YYYY/MM/DD");
-    }
-  },
-  computed: {
-    isLoadingHeadline() {
-      return this.$store.getters.getIsLoadingHeadline;
     },
-    headlineSize() {
-      return this.$store.getters.getHeadlineSize;
+    isArticle(article) {
+      return article.title === this.id && article.title === this.id;
     },
-    headline() {
-      return this.$store.getters.getHeadline;
-    },
-    article() {
-      return this.headlineSize > 0
-        ? this.headline.find(article => article.title === this.id)
-        : this.data || null;
-    }
-  },
-  created() {
-    this.headlineSize < 1 &&
-      fetch(
+    getArticle() {
+      return fetch(
         `${process.env.VUE_APP_API_URL}/api/v3/search?token=${process.env.VUE_APP_API_KEY}&in=title&q=${this.id}`
       )
         .then(res => res.json())
-        .then(data => (this.data = data.articles[0]));
+        .then(data => data.articles)
+        .then(articles => articles.find(article => this.isArticle(article)))
+        .catch(() => undefined);
+    }
+  },
+  computed: {
+    headline() {
+      return this.$store.getters.getHeadline;
+    }
+  },
+  async created() {
+    this.article =
+      this.headline.find(article => this.isArticle(article)) ||
+      (await this.getArticle());
+
+    this.isLoading = false;
   }
 };
 </script>
