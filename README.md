@@ -11,5 +11,4 @@ cd frontend
 yarn
 ```
 
-.env.exampleをコピーして.envに変更します  
-そして.envに環境変数を設定してください
+.env.exampleをコピーして.envに変更し環境変数を設定してください
