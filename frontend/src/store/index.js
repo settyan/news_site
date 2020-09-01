@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     headline: [],
-    isLoadingHeadline: false,
+    isLoadingHeadline: true,
     maxHeadlineSize: 9
   },
   getters: {
