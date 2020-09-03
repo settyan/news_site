@@ -58,7 +58,7 @@
         </div>
       </div>
     </template>
-    <template>
+    <template v-else>
       <h2 class="title">記事が見つかりませんでした</h2>
     </template>
   </div>
