@@ -125,13 +125,13 @@ export default {
 <style lang="scss" scoped>
 .root {
   padding: 0 12rem;
-}
 
-.article {
   @media screen and (max-width: 767px) {
     padding: 0;
   }
+}
 
+.article {
   &__header {
     margin-bottom: 4rem;
   }
