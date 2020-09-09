@@ -27,35 +27,38 @@
       <div class="article">
         <header class="article__header">
           <h2>
-            {{ article.title }}
+            {{ article.fields.title }}
           </h2>
           <div class="article__meta">
             <p class="article__date">
-              <i class="el-icon-date"></i>{{ time(article.publishedAt) }}
+              <i class="el-icon-date"></i>{{ time(article.fields.date) }}
             </p>
-            <p class="article__author">By.{{ article.source.name }}</p>
+            <p class="article__author" v-if="article.fields.author">
+              By.{{ article.fields.author }}
+            </p>
+            <p class="article__media" v-if="article.fields.source">
+              {{ article.fields.source }}
+            </p>
           </div>
         </header>
         <div class="article__imgbox">
           <el-image
             class="article__img"
-            :src="article.image"
+            :src="article.fields.eyecatch.fields.file.url"
             fit="cover"
             lazy
           ></el-image>
         </div>
-        <div class="article__content">
-          <p class="article__description">{{ article.description }}</p>
-          <p class="article__links">
-            <a
-              class="article__link"
-              :href="article.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ article.url }}</a
-            >
-          </p>
-        </div>
+        <div class="article__content" v-html="body"></div>
+        <p class="article__links">
+          <a
+            class="article__link"
+            :href="article.fields.original"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ article.fields.original }}</a
+          >
+        </p>
       </div>
     </template>
     <template v-else>
@@ -68,6 +71,10 @@
 import Vue from "vue";
 import moment from "moment";
 import Skeleton from "vue-loading-skeleton";
+import { createClient } from "../lib/contentful";
+import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+
+const client = createClient();
 
 Vue.use(Skeleton);
 
@@ -75,13 +82,12 @@ export default {
   name: "Article",
   metaInfo() {
     return {
-      title: this.id
+      title: this.article.fields.title
     };
   },
   data() {
     return {
       id: this.$route.params.id,
-      author: this.$route.params.author,
       isLoading: true,
       article: undefined
     };
@@ -98,23 +104,20 @@ export default {
       return article.title === this.id && article.title === this.id;
     },
     getArticle() {
-      return fetch(
-        `${process.env.VUE_APP_API_URL}/api/v3/search?token=${process.env.VUE_APP_API_KEY}&in=title&q=${this.id}`
-      )
-        .then(res => res.json())
-        .then(data => data.articles)
-        .then(articles => articles.find(article => this.isArticle(article)))
-        .catch(() => undefined);
+      return client.getEntry(this.id);
     }
   },
   computed: {
     headline() {
       return this.$store.getters.getHeadline;
+    },
+    body() {
+      return documentToHtmlString(this.article.fields.body);
     }
   },
   async created() {
     this.article =
-      this.headline.find(article => this.isArticle(article)) ||
+      this.headline.find(article => article.sys.id === this.id) ||
       (await this.getArticle());
 
     this.isLoading = false;
@@ -145,7 +148,8 @@ export default {
   }
 
   &__author,
-  &__date {
+  &__date,
+  &__media {
     display: flex;
     align-items: center;
     font-size: 1.4rem;
@@ -171,7 +175,8 @@ export default {
   }
 
   &__content {
-    margin-top: 4rem;
+    margin: 4rem 0;
+    line-height: 1.75;
   }
 
   &__link {

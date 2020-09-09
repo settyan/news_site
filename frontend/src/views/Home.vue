@@ -37,33 +37,31 @@
           class="col"
         >
           <div class="card">
-            <router-link
-              :to="
-                `/items/${article.source.name}/${article.publishedAt}/${article.title}`
-              "
-              class="card__link"
-            >
+            <router-link :to="`/post/${article.sys.id}`" class="card__link">
               <el-card :body-style="{ padding: '0px' }">
                 <div class="card__imgbox">
                   <el-image
                     class="card__img"
-                    :src="article.image"
+                    :src="article.fields.eyecatch.fields.file.url"
                     fit="cover"
                     lazy
                   ></el-image>
                 </div>
                 <div class="card__inner">
-                  <h2 class="card__title">{{ article.title }}</h2>
+                  <h2 class="card__title">{{ article.fields.title }}</h2>
                   <div class="card__meta">
                     <p class="card__date">
                       <i class="el-icon-date"></i
-                      ><span>{{ time(article.publishedAt) }}</span>
+                      ><span>{{ time(article.fields.date) }}</span>
                     </p>
-                    <p class="card__author">
-                      By.<span>{{ article.source.name }}</span>
+                    <p class="card__author" v-show="article.fields.author">
+                      By.<span>{{ article.fields.author }}</span>
+                    </p>
+                    <p class="card__media" v-if="article.fields.source">
+                      <span>{{ article.fields.source }}</span>
                     </p>
                   </div>
-                  <p class="card__excerpt">{{ article.description }}</p>
+                  <p class="card__excerpt">{{ article.fields.excerpt }}</p>
                 </div>
               </el-card>
             </router-link>
@@ -211,7 +209,8 @@ export default {
   }
 
   &__author,
-  &__date {
+  &__date,
+  &__media {
     display: flex;
     align-items: center;
     font-size: 1.4rem;

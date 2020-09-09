@@ -8,6 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@contentful/rich-text-html-renderer": "^14.1.1",
+    "contentful": "^7.14.6",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
     "moment": "^2.27.0",
