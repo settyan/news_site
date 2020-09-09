@@ -40,6 +40,9 @@
               {{ article.fields.source }}
             </p>
           </div>
+          <p class="article__category">
+            <el-tag>{{ article.fields.category.fields.name }}</el-tag>
+          </p>
         </header>
         <div class="article__imgbox">
           <el-image

@@ -61,7 +61,14 @@
                       <span>{{ article.fields.source }}</span>
                     </p>
                   </div>
-                  <p class="card__excerpt">{{ article.fields.excerpt }}</p>
+                  <p class="card__category">
+                    <el-tag size="medium">{{
+                      article.fields.category.fields.name
+                    }}</el-tag>
+                  </p>
+                  <p class="card__excerpt" v-if="article.fields.excerpt">
+                    {{ article.fields.excerpt }}
+                  </p>
                 </div>
               </el-card>
             </router-link>
@@ -220,6 +227,10 @@ export default {
     i {
       margin-right: 0.6rem;
     }
+  }
+
+  &__category {
+    margin: 1.2rem 0 0;
   }
 
   &__excerpt {
