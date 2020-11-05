@@ -232,7 +232,7 @@ export default {
     margin: 1.6rem 0 0;
     display: flex;
     align-items: center;
-    color: #b9b9b9;
+    color: #858585;
 
     p {
       margin: 0;
@@ -242,11 +242,11 @@ export default {
   }
 
   &__excerpt {
-    color: #7a7a7a;
+    color: #a5a5a5;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: 2rem 0 0;
+    margin: 1rem 0 0;
   }
 }
 .pagenation {

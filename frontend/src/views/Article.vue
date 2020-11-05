@@ -173,7 +173,7 @@ export default {
     margin: 1.6rem 0 0;
     display: flex;
     align-items: center;
-    color: #b9b9b9;
+    color: #858585;
 
     p {
       margin: 0;
