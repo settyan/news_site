@@ -64,6 +64,10 @@
                   <p class="card__excerpt" v-if="article.fields.excerpt">
                     {{ article.fields.excerpt }}
                   </p>
+                  <div class="card__rate">
+                    <el-rate value="3.5" disabled />
+                    <p>114514票の評価</p>
+                  </div>
                 </div>
               </el-card>
             </router-link>
@@ -224,12 +228,25 @@ export default {
     }
   }
 
+  &__rate {
+    margin: 1.6rem 0 0;
+    display: flex;
+    align-items: center;
+    color: #b9b9b9;
+
+    p {
+      margin: 0;
+      letter-spacing: 0.05em;
+      font-size: 1.4rem;
+    }
+  }
+
   &__excerpt {
-    color: #888;
+    color: #7a7a7a;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: 1.6rem 0 0;
+    margin: 2rem 0 0;
   }
 }
 .pagenation {

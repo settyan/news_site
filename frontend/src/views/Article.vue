@@ -3,7 +3,7 @@
     <template v-if="isLoading">
       <div class="article">
         <header class="article__header">
-          <h2>
+          <h2 class="article__title">
             <PuSkeleton height="4rem" />
           </h2>
           <div class="article__meta">
@@ -26,7 +26,7 @@
     <template v-else-if="article">
       <div class="article">
         <header class="article__header">
-          <h2>
+          <h2 class="article__title">
             {{ article.fields.title }}
           </h2>
           <div class="article__meta">
@@ -39,6 +39,10 @@
             <p class="article__media" v-if="article.fields.source">
               {{ article.fields.source }}
             </p>
+          </div>
+          <div class="article__rate">
+            <el-rate value="3.5" disabled />
+            <p>114514票の評価</p>
           </div>
         </header>
         <div class="article__imgbox">
@@ -139,10 +143,14 @@ export default {
     margin-bottom: 4rem;
   }
 
+  &__title {
+    margin: 0;
+  }
+
   &__meta {
     display: flex;
     align-items: center;
-    margin: 1rem 0 0;
+    margin: 1.4rem 0 0;
     overflow: hidden;
     white-space: nowrap;
   }
@@ -158,6 +166,19 @@ export default {
 
     i {
       margin-right: 0.6rem;
+    }
+  }
+
+  &__rate {
+    margin: 1.6rem 0 0;
+    display: flex;
+    align-items: center;
+    color: #b9b9b9;
+
+    p {
+      margin: 0;
+      letter-spacing: 0.05em;
+      font-size: 1.4rem;
     }
   }
 
