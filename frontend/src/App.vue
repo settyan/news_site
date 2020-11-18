@@ -49,7 +49,7 @@ export default {
 *,
 ::before,
 ::after {
-  outline: none;
+  outline: 0;
 }
 
 html {
