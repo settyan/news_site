@@ -96,6 +96,14 @@ import comment from "@/config/comment.json";
 
 const client = createClient();
 
+const shuffle = ([...array]) => {
+  for (let i = array.length - 1; i >= 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 Vue.use(Skeleton);
 
 export default {
@@ -111,7 +119,7 @@ export default {
       isLoading: true,
       article: undefined,
       rate: 0,
-      comment
+      nico: null
     };
   },
   methods: {
@@ -128,18 +136,19 @@ export default {
     getArticle() {
       return client.getEntry(this.id);
     },
-    initCommentArea() {
+    handleOnResize() {
       if (!window) return;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const nico = new nicojs({
+      this.nico.resize(window.innerWidth, window.innerHeight);
+    },
+    initCommentArea() {
+      this.nico = new nicojs({
         app: document.getElementById("comment-area"),
-        width,
-        height,
+        width: window.innerWidth,
+        height: window.innerHeight,
         font_size: 50,
         color: "#333"
       });
-      nico.loop(comment);
+      this.nico.loop(shuffle(comment));
     }
   },
   computed: {
@@ -159,10 +168,10 @@ export default {
   },
   mounted() {
     this.initCommentArea();
-    window.addEventListener("resize", this.initCommentArea);
+    window.addEventListener("resize", this.handleOnResize);
   },
   beforeDestroy() {
-    window.removeEventListener("resize", this.initCommentArea);
+    window.removeEventListener("resize", this.handleOnResize);
   }
 };
 </script>
