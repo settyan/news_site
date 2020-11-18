@@ -75,6 +75,23 @@
               </div>
             </div>
           </div>
+          <div class="comment">
+            <h3 class="comment__title">コメントを投稿する</h3>
+            <div class="comment__content">
+              <el-input
+                type="textarea"
+                :rows="5"
+                placeholder="コメント内容"
+                v-model="comment"
+              >
+              </el-input>
+            </div>
+            <div class="comment__buttons">
+              <el-button type="primary" :disabled="!comment"
+                >投稿する</el-button
+              >
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -119,6 +136,7 @@ export default {
       isLoading: true,
       article: undefined,
       rate: 0,
+      comment: "",
       nico: null
     };
   },
@@ -271,6 +289,14 @@ export default {
   &__content {
     margin-top: 2rem;
   }
+  &__buttons {
+    margin-top: 2rem;
+  }
+}
+
+.comment {
+  margin-top: 4rem;
+
   &__buttons {
     margin-top: 2rem;
   }
