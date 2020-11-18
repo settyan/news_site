@@ -171,7 +171,6 @@ export default {
     window.addEventListener("resize", this.handleOnResize);
   },
   beforeDestroy() {
-    this.nico = null;
     window.removeEventListener("resize", this.handleOnResize);
   }
 };
@@ -283,6 +282,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1000;
+  z-index: -1;
+  pointer-events: none;
 }
 </style>
