@@ -46,6 +46,12 @@ export default {
 </script>
 
 <style lang="scss">
+*,
+::before,
+::after {
+  outline: none;
+}
+
 html {
   font-size: 62.5%;
 }
