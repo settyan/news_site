@@ -171,6 +171,7 @@ export default {
     window.addEventListener("resize", this.handleOnResize);
   },
   beforeDestroy() {
+    this.nico = null;
     window.removeEventListener("resize", this.handleOnResize);
   }
 };
