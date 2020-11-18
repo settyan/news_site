@@ -5754,6 +5754,11 @@ nice-try@^1.0.4:
   resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==
 
+nicojs@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/nicojs/-/nicojs-1.1.8.tgz#e584f971b1bda230b0975b13c392849bb0d32cf8"
+  integrity sha1-5YT5cbG9ojCwl1sTw5KEm7DTLPg=
+
 no-case@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"

@@ -63,11 +63,25 @@
             >{{ article.fields.original }}</a
           >
         </p>
+        <div class="article__footer">
+          <div class="rate">
+            <h3 class="rate__title">信憑性を評価してください</h3>
+            <div class="rate__content">
+              <el-rate v-model="rate"></el-rate>
+              <div class="rate__buttons">
+                <el-button type="warning" :disabled="rate < 1"
+                  >評価する</el-button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
     <template v-else>
       <h2 class="title">記事が見つかりませんでした</h2>
     </template>
+    <div class="comment-area" id="comment-area"></div>
   </div>
 </template>
 
@@ -75,8 +89,10 @@
 import Vue from "vue";
 import moment from "moment";
 import Skeleton from "vue-loading-skeleton";
-import { createClient } from "../lib/contentful";
+import { createClient } from "@/lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import nicojs from "nicojs";
+import comment from "@/config/comment.json";
 
 const client = createClient();
 
@@ -93,7 +109,9 @@ export default {
     return {
       id: this.$route.params.id,
       isLoading: true,
-      article: undefined
+      article: undefined,
+      rate: 0,
+      comment
     };
   },
   methods: {
@@ -109,6 +127,19 @@ export default {
     },
     getArticle() {
       return client.getEntry(this.id);
+    },
+    initCommentArea() {
+      if (!window) return;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const nico = new nicojs({
+        app: document.getElementById("comment-area"),
+        width,
+        height,
+        font_size: 50,
+        color: "#333"
+      });
+      nico.loop(comment);
     }
   },
   computed: {
@@ -125,6 +156,13 @@ export default {
       (await this.getArticle());
 
     this.isLoading = false;
+  },
+  mounted() {
+    this.initCommentArea();
+    window.addEventListener("resize", this.initCommentArea);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.initCommentArea);
   }
 };
 </script>
@@ -203,5 +241,38 @@ export default {
   &__link {
     color: #409eff;
   }
+
+  &__footer {
+    margin-top: 5rem;
+  }
+}
+
+.rate {
+  padding: 5rem 0;
+  border-top: 1px solid #e6e6e6;
+  border-bottom: 1px solid #e6e6e6;
+  text-align: center;
+
+  &__title {
+    font-size: 2rem;
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  &__content {
+    margin-top: 2rem;
+  }
+  &__buttons {
+    margin-top: 2rem;
+  }
+}
+
+.comment-area {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
 }
 </style>
