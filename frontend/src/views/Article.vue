@@ -26,23 +26,30 @@
     <template v-else-if="article">
       <div class="article">
         <header class="article__header">
-          <h2 class="article__title">
-            {{ article.fields.title }}
-          </h2>
-          <div class="article__meta">
-            <p class="article__date">
-              <i class="el-icon-date"></i>{{ time(article.fields.date) }}
-            </p>
-            <p class="article__author" v-if="article.fields.author">
-              By.{{ article.fields.author }}
-            </p>
-            <p class="article__media" v-if="article.fields.source">
-              {{ article.fields.source }}
-            </p>
+          <div class="article__header-main">
+            <h2 class="article__title">
+              {{ article.fields.title }}
+            </h2>
+            <div class="article__meta">
+              <p class="article__date">
+                <i class="el-icon-date"></i>{{ time(article.fields.date) }}
+              </p>
+              <p class="article__author" v-if="article.fields.author">
+                By.{{ article.fields.author }}
+              </p>
+              <p class="article__media" v-if="article.fields.source">
+                {{ article.fields.source }}
+              </p>
+            </div>
           </div>
-          <div class="article__rate">
-            <el-rate value="3.5" disabled />
-            <p>114514票の評価</p>
+          <div class="article__header-footer">
+            <div class="article__rate">
+              <div class="article__rate-inner">
+                <p class="article__rate-num">3.5</p>
+                <el-rate value="3.5" disabled />
+                <p class="article__rate-text">114514票の評価</p>
+              </div>
+            </div>
           </div>
         </header>
         <div class="article__imgbox">
@@ -204,6 +211,17 @@ export default {
 .article {
   &__header {
     margin-bottom: 4rem;
+    display: flex;
+
+    &-main {
+      flex: 1;
+    }
+
+    &-footer {
+      margin-left: 2rem;
+      padding-left: 2rem;
+      border-left: 1px solid #e6e6e6;
+    }
   }
 
   &__title {
@@ -233,15 +251,24 @@ export default {
   }
 
   &__rate {
-    margin: 1.6rem 0 0;
+    height: 100%;
+    text-align: center;
     display: flex;
+    justify-content: center;
     align-items: center;
-    color: #858585;
 
-    p {
-      margin: 0;
-      letter-spacing: 0.05em;
-      font-size: 1.4rem;
+    &-num {
+      font-size: 4rem;
+      font-weight: 600;
+      font-family: "游明朝体", "Yu Mincho", YuMincho, "ヒラギノ明朝 Pro",
+        "Hiragino Mincho Pro", "MS P明朝", "MS PMincho", serif;
+      margin: 0 0 1rem;
+    }
+
+    &-text {
+      color: #949494;
+      font-size: 1.3rem;
+      margin: 0.4rem;
     }
   }
 
