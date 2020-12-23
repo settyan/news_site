@@ -45,7 +45,7 @@
           <div class="article__header-footer">
             <div class="article__rate">
               <div class="article__rate-inner">
-                <p class="article__rate-num">3.5</p>
+                <p class="article__rate-num">3<span>.5</span></p>
                 <el-rate value="3.5" disabled />
                 <p class="article__rate-text">114514票の評価</p>
               </div>
@@ -215,6 +215,9 @@ export default {
 
     &-main {
       flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     &-footer {
