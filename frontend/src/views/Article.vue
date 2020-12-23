@@ -213,6 +213,10 @@ export default {
     margin-bottom: 4rem;
     display: flex;
 
+    @media screen and (max-width: 767px) {
+      display: block;
+    }
+
     &-main {
       flex: 1;
       display: flex;
@@ -224,6 +228,15 @@ export default {
       margin-left: 2rem;
       padding-left: 2rem;
       border-left: 1px solid #e6e6e6;
+
+      @media screen and (max-width: 767px) {
+        margin-top: 2rem;
+        padding-top: 3.2rem;
+        margin-left: 0;
+        padding-left: 0;
+        border-top: 1px solid #e6e6e6;
+        border-left: none;
+      }
     }
   }
 
@@ -304,7 +317,7 @@ export default {
 
 .rate {
   background: #f7f7f7;
-  padding: 2.8rem 10rem;
+  padding: 2.8rem;
   border-radius: 0.4rem;
 
   &__inner {
