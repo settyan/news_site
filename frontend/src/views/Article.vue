@@ -53,7 +53,7 @@
             lazy
           ></el-image>
         </div>
-        <div class="article__content" v-html="body"></div>
+        <div class="article__content">{{ article.fields.excerpt }}</div>
         <p class="article__links">
           <a
             class="article__link"
@@ -107,7 +107,6 @@ import Vue from "vue";
 import moment from "moment";
 import Skeleton from "vue-loading-skeleton";
 import { createClient } from "@/lib/contentful";
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import nicojs from "nicojs";
 import comment from "@/config/comment.json";
 
@@ -172,9 +171,6 @@ export default {
   computed: {
     headline() {
       return this.$store.getters.getHeadline;
-    },
-    body() {
-      return documentToHtmlString(this.article.fields.body);
     }
   },
   async created() {
