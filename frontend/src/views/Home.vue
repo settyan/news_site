@@ -94,7 +94,7 @@
 
 <script>
 import Vue from "vue";
-import moment from "moment";
+import dayjs from "dayjs";
 import Skeleton from "vue-loading-skeleton";
 
 Vue.use(Skeleton);
@@ -112,11 +112,7 @@ export default {
   },
   methods: {
     time: function(time) {
-      time = time.replace(/(.*) UTC/, "$1");
-      return moment
-        .utc(time)
-        .local()
-        .format("YYYY/MM/DD");
+      return dayjs(time).format("YYYY/MM/DD");
     },
     handleCurrentChange() {
       scrollTo(0, 0);

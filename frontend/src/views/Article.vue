@@ -65,11 +65,17 @@
         </p>
         <div class="article__footer">
           <div class="rate">
-            <h3 class="rate__title">信憑性を評価してください</h3>
-            <div class="rate__content">
-              <el-rate v-model="rate"></el-rate>
+            <div class="rate__inner">
+              <div class="rate__content">
+                <h3 class="rate__title">信憑性を評価してください</h3>
+                <el-rate v-model="rate"></el-rate>
+              </div>
               <div class="rate__buttons">
-                <el-button type="warning" :disabled="rate < 1"
+                <el-button
+                  class="rate__button"
+                  size=""
+                  type="warning"
+                  :disabled="rate < 1"
                   >評価する</el-button
                 >
               </div>
@@ -104,7 +110,7 @@
 
 <script>
 import Vue from "vue";
-import moment from "moment";
+import dayjs from "dayjs";
 import Skeleton from "vue-loading-skeleton";
 import { createClient } from "@/lib/contentful";
 import nicojs from "nicojs";
@@ -141,11 +147,7 @@ export default {
   },
   methods: {
     time(time) {
-      const newTime = time.replace(/(.*) UTC/, "$1");
-      return moment
-        .utc(newTime)
-        .local()
-        .format("YYYY/MM/DD");
+      return dayjs(time).format("YYYY/MM/DD");
     },
     isArticle(article) {
       return article.title === this.id && article.title === this.id;
@@ -271,22 +273,36 @@ export default {
 }
 
 .rate {
-  padding: 5rem 0;
-  border-top: 1px solid #e6e6e6;
-  border-bottom: 1px solid #e6e6e6;
-  text-align: center;
+  background: #f7f7f7;
+  padding: 2.8rem 10rem;
+  border-radius: 0.4rem;
 
-  &__title {
-    font-size: 2rem;
-    letter-spacing: 0.05em;
-    margin: 0;
+  &__inner {
+    max-width: 40rem;
+    margin: 0 auto;
   }
 
   &__content {
-    margin-top: 2rem;
+    background: #fff;
+    padding: 4rem;
+    text-align: center;
+    border-radius: 0.4rem;
   }
+
+  &__title {
+    margin: 0 0 2rem;
+    color: rgb(95, 95, 95);
+  }
+
   &__buttons {
     margin-top: 2rem;
+  }
+
+  ::v-deep &__button {
+    width: 100%;
+    padding: 2rem;
+    font-size: 1.8rem;
+    font-weight: 600;
   }
 }
 
