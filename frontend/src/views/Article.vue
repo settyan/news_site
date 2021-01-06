@@ -45,9 +45,9 @@
           <div class="article__header-footer">
             <div class="article__rate">
               <div class="article__rate-inner">
-                <p class="article__rate-num">3<span>.5</span></p>
-                <el-rate value="3.5" disabled />
-                <p class="article__rate-text">114514票の評価</p>
+                <p class="article__rate-num">{{ rate }}</p>
+                <el-rate :value="rate" disabled />
+                <p class="article__rate-text">{{ rateCount }}票の評価</p>
               </div>
             </div>
           </div>
@@ -75,14 +75,15 @@
             <div class="rate__inner">
               <div class="rate__content">
                 <h3 class="rate__title">信憑性を評価してください</h3>
-                <el-rate v-model="rate"></el-rate>
+                <el-rate v-model="fields.rate"></el-rate>
               </div>
               <div class="rate__buttons">
                 <el-button
                   class="rate__button"
                   size=""
                   type="warning"
-                  :disabled="rate < 1"
+                  :disabled="fields.rate < 1"
+                  @click="handleAddRate"
                   >評価する</el-button
                 >
               </div>
@@ -95,12 +96,15 @@
                 type="textarea"
                 :rows="5"
                 placeholder="コメント内容"
-                v-model="comment"
+                v-model="fields.comment"
               >
               </el-input>
             </div>
             <div class="comment__buttons">
-              <el-button type="primary" :disabled="!comment"
+              <el-button
+                type="primary"
+                :disabled="!fields.comment"
+                @click="handleAddComment"
                 >投稿する</el-button
               >
             </div>
@@ -121,7 +125,6 @@ import dayjs from "dayjs";
 import Skeleton from "vue-loading-skeleton";
 import { createClient } from "@/lib/contentful";
 import nicojs from "nicojs";
-import comment from "@/config/comment.json";
 
 const client = createClient();
 
@@ -139,7 +142,7 @@ export default {
   name: "Article",
   metaInfo() {
     return {
-      title: this.article.fields.title
+      title: this.article && this.article.fields && this.article.fields.title
     };
   },
   data() {
@@ -148,7 +151,12 @@ export default {
       isLoading: true,
       article: undefined,
       rate: 0,
-      comment: "",
+      rateCount: 0,
+      comment: [],
+      fields: {
+        rate: 0,
+        comment: ""
+      },
       nico: null
     };
   },
@@ -174,7 +182,93 @@ export default {
         font_size: 50,
         color: "#333"
       });
-      this.nico.loop(shuffle(comment));
+    },
+    updateCommentArea() {
+      this.nico.loop(shuffle(this.comment));
+    },
+    async handleAddRate() {
+      try {
+        const rateRes = await fetch(
+          `${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ rate: this.fields.rate })
+          }
+        );
+        if (!rateRes.ok) {
+          throw Error(rateRes.statusText);
+        }
+        this.$message({
+          message: "評価しました!!",
+          type: "success"
+        });
+        this.fetchRate();
+      } catch (err) {
+        this.$message.error({
+          message: err
+        });
+      }
+    },
+    async handleAddComment() {
+      try {
+        const commentRes = await fetch(
+          `${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ comment: this.fields.comment })
+          }
+        );
+        if (!commentRes.ok) {
+          throw Error(commentRes.statusText);
+        }
+        this.$message({
+          message: "コメントを追加しました!!",
+          type: "success"
+        });
+        this.fetchComment();
+      } catch (err) {
+        this.$message.error({
+          message: err
+        });
+      }
+    },
+    async fetchRate() {
+      return fetch(`${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`)
+        .then(res => {
+          if (!res.ok) {
+            throw Error(res.statusText);
+          }
+          return res.json();
+        })
+        .then(data => {
+          this.rate = Number(data.mean);
+          this.rateCount = data.count;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    async fetchComment() {
+      fetch(`${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`)
+        .then(res => {
+          if (!res.ok) {
+            throw Error(res.statusText);
+          }
+          return res.json();
+        })
+        .then(data => {
+          this.comment = data;
+          this.updateCommentArea();
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {
@@ -186,11 +280,12 @@ export default {
     this.article =
       this.headline.find(article => article.sys.id === this.id) ||
       (await this.getArticle());
-
     this.isLoading = false;
   },
   mounted() {
     this.initCommentArea();
+    this.fetchRate();
+    this.fetchComment();
     window.addEventListener("resize", this.handleOnResize);
   },
   beforeDestroy() {
