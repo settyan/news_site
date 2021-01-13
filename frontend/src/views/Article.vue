@@ -71,7 +71,7 @@
           >
         </p>
         <div class="article__footer">
-          <div class="rate">
+          <div class="rate" :class="isAddedRate && 'is-added'">
             <div class="rate__inner">
               <div class="rate__content">
                 <h3 class="rate__title">信憑性を評価してください</h3>
@@ -82,7 +82,7 @@
                   class="rate__button"
                   size=""
                   type="warning"
-                  :disabled="fields.rate < 1"
+                  :disabled="fields.rate < 1 || isAddingRate"
                   @click="handleAddRate"
                   >評価する</el-button
                 >
@@ -103,8 +103,8 @@
             <div class="comment__buttons">
               <el-button
                 type="primary"
-                :disabled="!fields.comment"
                 @click="handleAddComment"
+                :disabled="!fields.comment || isAddingRate"
                 >投稿する</el-button
               >
             </div>
@@ -157,7 +157,15 @@ export default {
         rate: 0,
         comment: ""
       },
-      nico: null
+      isAddingRate: false,
+      isAddingComment: false,
+      nico: null,
+      get isAddedRate() {
+        let addedRateArticles = JSON.parse(
+          localStorage.getItem("addedRateArticles")
+        );
+        return addedRateArticles.find(id => id === this.id);
+      }
     };
   },
   methods: {
@@ -187,6 +195,7 @@ export default {
       this.nico.loop(shuffle(this.comment));
     },
     async handleAddRate() {
+      this.isAddingRate = true;
       try {
         const rateRes = await fetch(
           `${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`,
@@ -201,6 +210,13 @@ export default {
         if (!rateRes.ok) {
           throw Error(rateRes.statusText);
         }
+        let addedRateArticles =
+          JSON.parse(localStorage.getItem("addedRateArticles")) || [];
+        addedRateArticles = [...addedRateArticles, this.id];
+        localStorage.setItem(
+          "addedRateArticles",
+          JSON.stringify(addedRateArticles)
+        );
         this.$message({
           message: "評価しました!!",
           type: "success"
@@ -211,8 +227,10 @@ export default {
           message: err
         });
       }
+      this.isAddingRate = false;
     },
     async handleAddComment() {
+      this.isAddingRate = true;
       try {
         const commentRes = await fetch(
           `${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`,
@@ -227,6 +245,7 @@ export default {
         if (!commentRes.ok) {
           throw Error(commentRes.statusText);
         }
+        this.fields.comment = "";
         this.$message({
           message: "コメントを追加しました!!",
           type: "success"
@@ -237,8 +256,9 @@ export default {
           message: err
         });
       }
+      this.isAddingRate = false;
     },
-    async fetchRate() {
+    fetchRate() {
       return fetch(`${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`)
         .then(res => {
           if (!res.ok) {
@@ -247,15 +267,15 @@ export default {
           return res.json();
         })
         .then(data => {
-          this.rate = Number(data.mean);
+          this.rate = Math.round(Number(data.mean) * 100) / 100;
           this.rateCount = data.count;
         })
         .catch(err => {
           console.log(err);
         });
     },
-    async fetchComment() {
-      fetch(`${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`)
+    fetchComment() {
+      return fetch(`${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`)
         .then(res => {
           if (!res.ok) {
             throw Error(res.statusText);
@@ -414,6 +434,33 @@ export default {
   background: #f7f7f7;
   padding: 2.8rem;
   border-radius: 0.4rem;
+  position: relative;
+  overflow: hidden;
+
+  &.is-added {
+    pointer-events: none;
+
+    &::after {
+      content: "この記事は既に評価されています";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      pointer-events: none;
+      background: #e4b97388;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 3.2rem;
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      color: #fff;
+      padding: 2.8rem;
+      box-sizing: border-box;
+    }
+  }
 
   &__inner {
     max-width: 40rem;
