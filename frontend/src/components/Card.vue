@@ -79,6 +79,13 @@ export default {
   },
   mounted() {
     this.fetchRate();
+  },
+  watch: {
+    id() {
+      this.rate = 0;
+      this.rateCount = 0;
+      this.fetchRate();
+    }
   }
 };
 </script>
