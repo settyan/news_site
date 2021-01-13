@@ -161,9 +161,8 @@ export default {
       isAddingComment: false,
       nico: null,
       get isAddedRate() {
-        let addedRateArticles = JSON.parse(
-          localStorage.getItem("addedRateArticles")
-        );
+        let addedRateArticles =
+          JSON.parse(localStorage.getItem("addedRateArticles")) || [];
         return addedRateArticles.find(id => id === this.id);
       }
     };
