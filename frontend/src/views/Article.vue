@@ -89,24 +89,33 @@
               </div>
             </div>
           </div>
-          <div class="stamp-container">
-            <div class="stamp is-smile">
+          <div
+            class="stamp-container"
+            :class="(isAddingStamp || addedStamp) && 'is-disabled'"
+          >
+            <div class="stamp is-smile" :class="isAddedStamp(1) && 'is-added'">
               <font-awesome-icon icon="smile" @click="handleAddStamp(1)" />
               <span>{{ stamp.smile }}</span>
             </div>
-            <div class="stamp is-sad">
+            <div class="stamp is-sad" :class="isAddedStamp(2) && 'is-added'">
               <font-awesome-icon icon="sad-tear" @click="handleAddStamp(2)" />
               <span>{{ stamp.crying }}</span>
             </div>
-            <div class="stamp is-angry">
+            <div class="stamp is-angry" :class="isAddedStamp(3) && 'is-added'">
               <font-awesome-icon icon="angry" @click="handleAddStamp(3)" />
               <span>{{ stamp.anger }}</span>
             </div>
-            <div class="stamp is-surprise">
+            <div
+              class="stamp is-surprise"
+              :class="isAddedStamp(4) && 'is-added'"
+            >
               <font-awesome-icon icon="surprise" @click="handleAddStamp(4)" />
               <span>{{ stamp.surprise }}</span>
             </div>
-            <div class="stamp is-thinking">
+            <div
+              class="stamp is-thinking"
+              :class="isAddedStamp(5) && 'is-added'"
+            >
               <font-awesome-icon
                 icon="meh-rolling-eyes"
                 @click="handleAddStamp(5)"
@@ -129,7 +138,7 @@
               <el-button
                 type="primary"
                 @click="handleAddComment"
-                :disabled="!fields.comment || isAddingRate"
+                :disabled="!fields.comment || isAddingComment"
                 >投稿する</el-button
               >
             </div>
@@ -191,11 +200,20 @@ export default {
       },
       isAddingRate: false,
       isAddingComment: false,
+      isAddingStamp: false,
       nico: null,
       get isAddedRate() {
         let addedRateArticles =
           JSON.parse(localStorage.getItem("addedRateArticles")) || [];
         return addedRateArticles.find(id => id === this.id);
+      },
+      get addedStamp() {
+        let addedStampArticles =
+          JSON.parse(localStorage.getItem("addedStampArticles")) || {};
+        return (
+          Object.entries(addedStampArticles).find(([key]) => key === this.id) &&
+          Object.entries(addedStampArticles).find(([key]) => key === this.id)[1]
+        );
       }
     };
   },
@@ -261,7 +279,7 @@ export default {
       this.isAddingRate = false;
     },
     async handleAddComment() {
-      this.isAddingRate = true;
+      this.isAddingComment = true;
       try {
         const commentRes = await fetch(
           `${process.env.VUE_APP_API_URL}/comments?newsID=${this.id}`,
@@ -287,9 +305,10 @@ export default {
           message: err
         });
       }
-      this.isAddingRate = false;
+      this.isAddingComment = false;
     },
     async handleAddStamp(stampID) {
+      this.isAddingStamp = true;
       try {
         const stampRes = await fetch(
           `${process.env.VUE_APP_API_URL}/emotions?newsID=${this.id}`,
@@ -306,6 +325,13 @@ export default {
         if (!stampRes.ok) {
           throw Error(stampRes.statusText);
         }
+        let addedStampArticles =
+          JSON.parse(localStorage.getItem("addedStampArticles")) || {};
+        addedStampArticles = { ...addedStampArticles, [this.id]: stampID };
+        localStorage.setItem(
+          "addedStampArticles",
+          JSON.stringify(addedStampArticles)
+        );
         this.$message({
           message: "スタンプを投稿しました!!",
           type: "success"
@@ -316,7 +342,7 @@ export default {
           message: err
         });
       }
-      this.isAddingRate = false;
+      this.isAddingStamp = false;
     },
     fetchRate() {
       return fetch(`${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`)
@@ -364,6 +390,9 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    isAddedStamp(stampID) {
+      return this.addedStamp === stampID;
     }
   },
   computed: {
@@ -591,6 +620,10 @@ export default {
     justify-content: center;
     align-items: center;
     margin: 4rem -1.2rem 2.4rem;
+
+    &.is-disabled {
+      pointer-events: none;
+    }
   }
 
   font-size: 5.4rem;
@@ -606,7 +639,8 @@ export default {
   }
 
   &:hover,
-  &.is-selected {
+  &.is-selected,
+  &.is-added {
     &.is-smile {
       color: #ffd251;
     }
