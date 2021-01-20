@@ -89,6 +89,31 @@
               </div>
             </div>
           </div>
+          <div class="stamp-container">
+            <div class="stamp is-smile">
+              <font-awesome-icon icon="smile" @click="handleAddStamp(1)" />
+              <span>{{ stamp.smile }}</span>
+            </div>
+            <div class="stamp is-sad">
+              <font-awesome-icon icon="sad-tear" @click="handleAddStamp(2)" />
+              <span>{{ stamp.crying }}</span>
+            </div>
+            <div class="stamp is-angry">
+              <font-awesome-icon icon="angry" @click="handleAddStamp(3)" />
+              <span>{{ stamp.anger }}</span>
+            </div>
+            <div class="stamp is-surprise">
+              <font-awesome-icon icon="surprise" @click="handleAddStamp(4)" />
+              <span>{{ stamp.surprise }}</span>
+            </div>
+            <div class="stamp is-thinking">
+              <font-awesome-icon
+                icon="meh-rolling-eyes"
+                @click="handleAddStamp(5)"
+              />
+              <span>{{ stamp.thinking }}</span>
+            </div>
+          </div>
           <div class="comment">
             <h3 class="comment__title">コメントを投稿する</h3>
             <div class="comment__content">
@@ -153,6 +178,13 @@ export default {
       rate: 0,
       rateCount: 0,
       comment: [],
+      stamp: {
+        smile: 0,
+        crying: 0,
+        anger: 0,
+        surprise: 0,
+        thinking: 0
+      },
       fields: {
         rate: 0,
         comment: ""
@@ -257,6 +289,35 @@ export default {
       }
       this.isAddingRate = false;
     },
+    async handleAddStamp(stampID) {
+      try {
+        const stampRes = await fetch(
+          `${process.env.VUE_APP_API_URL}/emotions?newsID=${this.id}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              emotion: stampID
+            })
+          }
+        );
+        if (!stampRes.ok) {
+          throw Error(stampRes.statusText);
+        }
+        this.$message({
+          message: "スタンプを投稿しました!!",
+          type: "success"
+        });
+        this.fetchStamp();
+      } catch (err) {
+        this.$message.error({
+          message: err
+        });
+      }
+      this.isAddingRate = false;
+    },
     fetchRate() {
       return fetch(`${process.env.VUE_APP_API_URL}/rates?newsID=${this.id}`)
         .then(res => {
@@ -288,6 +349,21 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    fetchStamp() {
+      return fetch(`${process.env.VUE_APP_API_URL}/emotions?newsID=${this.id}`)
+        .then(res => {
+          if (!res.ok) {
+            throw Error(res.statusText);
+          }
+          return res.json();
+        })
+        .then(data => {
+          this.stamp = data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {
@@ -305,6 +381,7 @@ export default {
     this.initCommentArea();
     this.fetchRate();
     this.fetchComment();
+    this.fetchStamp();
     window.addEventListener("resize", this.handleOnResize);
   },
   beforeDestroy() {
@@ -506,5 +583,45 @@ export default {
   height: 100%;
   z-index: 1000;
   pointer-events: none;
+}
+
+.stamp {
+  &-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 4rem -1.2rem 2.4rem;
+  }
+
+  font-size: 5.4rem;
+  padding: 1.2rem;
+  color: #d0d0d0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    font-size: 0.4em;
+    margin-top: 0.2em;
+  }
+
+  &:hover,
+  &.is-selected {
+    &.is-smile {
+      color: #ffd251;
+    }
+    &.is-sad {
+      color: #4edae1;
+    }
+    &.is-angry {
+      color: #ff6b73;
+    }
+    &.is-surprise {
+      color: #9bdb35;
+    }
+    &.is-thinking {
+      color: #8a97ff;
+    }
+  }
 }
 </style>
