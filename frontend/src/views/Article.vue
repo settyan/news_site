@@ -137,6 +137,7 @@
               </div>
             </li>
           </ul>
+          <p class="error" v-else>コメントがありません</p>
           <div class="comment">
             <div class="comment__header">
               <div class="comment__avatar">
@@ -700,5 +701,9 @@ export default {
       color: #8a97ff;
     }
   }
+}
+
+.error {
+  color: #b5b5b5;
 }
 </style>
