@@ -146,6 +146,7 @@
             </div>
             <div class="comment__content">
               <el-input
+                class="comment__textarea"
                 type="textarea"
                 :rows="5"
                 placeholder="コメント内容"
@@ -653,7 +654,7 @@ export default {
     margin-top: 2rem;
   }
 
-  &__button {
+  &__textarea {
     -webkit-appearance: none;
   }
 }
