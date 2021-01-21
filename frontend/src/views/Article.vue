@@ -62,12 +62,11 @@
         </div>
         <div class="article__content">{{ article.fields.excerpt }}</div>
         <p class="article__links">
-          <a
+          <el-button
             class="article__link"
-            :href="article.fields.original"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ article.fields.original }}</a
+            type="primary"
+            @click="handleOnLinkClick"
+            >本文を読む</el-button
           >
         </p>
         <div class="article__footer">
@@ -218,6 +217,9 @@ export default {
     };
   },
   methods: {
+    handleOnLinkClick() {
+      window.open(this.article.fields.original, "_blank");
+    },
     time(time) {
       return dayjs(time).format("YYYY/MM/DD");
     },
@@ -486,6 +488,23 @@ export default {
     }
   }
 
+  &__links {
+    text-align: center;
+  }
+
+  &__link {
+    font-size: 1.8rem;
+    letter-spacing: 0.1em;
+    padding: 2.2rem;
+    font-weight: bold;
+    width: 100%;
+    max-width: 40rem;
+
+    @media screen and (max-width: 767px) {
+      padding: 2rem;
+    }
+  }
+
   &__rate {
     height: 100%;
     text-align: center;
@@ -526,10 +545,6 @@ export default {
     line-height: 1.75;
   }
 
-  &__link {
-    color: #409eff;
-  }
-
   &__footer {
     margin-top: 5rem;
   }
@@ -564,6 +579,10 @@ export default {
       color: #fff;
       padding: 2.8rem;
       box-sizing: border-box;
+
+      @media screen and (max-width: 767px) {
+        font-size: 2.4rem;
+      }
     }
   }
 
@@ -621,6 +640,10 @@ export default {
     align-items: center;
     margin: 4rem -1.2rem 2.4rem;
 
+    @media screen and (max-width: 767px) {
+      margin: 4rem -1rem -1rem;
+    }
+
     &.is-disabled {
       pointer-events: none;
     }
@@ -632,6 +655,11 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 767px) {
+    font-size: 4rem;
+    padding: 1rem;
+  }
 
   span {
     font-size: 0.4em;
