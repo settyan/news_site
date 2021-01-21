@@ -610,7 +610,11 @@ export default {
 }
 
 .section-title {
-  margin: 4rem 0 2rem;
+  margin: 4rem 0;
+  background: #ebebeb;
+  padding: 1.4rem 2rem;
+  color: #5c5c5c;
+  border-radius: 0.4rem;
 }
 
 .comment-archive {
