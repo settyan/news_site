@@ -296,6 +296,7 @@ export default {
           message: "コメントを追加しました!!",
           type: "success"
         });
+        this.fetchComment();
       } catch (err) {
         this.$message.error({
           message: err
@@ -607,8 +608,11 @@ export default {
   }
 }
 
+.section-title {
+  margin: 4rem 0 2rem;
+}
+
 .comment-archive {
-  margin-top: 4rem;
   list-style: none;
   padding: 0;
 
