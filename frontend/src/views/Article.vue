@@ -154,6 +154,7 @@
               </el-input>
               <div class="comment__buttons">
                 <el-button
+                  class="comment__button"
                   type="primary"
                   @click="handleAddComment"
                   :disabled="!fields.comment || isAddingComment"
@@ -646,6 +647,10 @@ export default {
 
   &__buttons {
     margin-top: 2rem;
+  }
+
+  &__button {
+    -webkit-appearance: none;
   }
 }
 
