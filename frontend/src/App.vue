@@ -76,6 +76,13 @@ body {
     font-size: 3.2rem;
   }
 }
+
+.el-message {
+  @media screen and (max-width: 767px) {
+    min-width: 0;
+    width: calc(100% - 4rem);
+  }
+}
 </style>
 
 <style lang="scss" scoped>
