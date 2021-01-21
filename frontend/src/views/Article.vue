@@ -655,7 +655,9 @@ export default {
   }
 
   &__textarea {
-    -webkit-appearance: none;
+    ::v-deep textarea {
+      -webkit-appearance: none;
+    }
   }
 }
 
