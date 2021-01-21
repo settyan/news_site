@@ -619,6 +619,7 @@ export default {
 
   &__item {
     display: flex;
+    margin-bottom: 2rem;
 
     &-header {
       margin-right: 2.4rem;
