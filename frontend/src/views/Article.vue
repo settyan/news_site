@@ -122,8 +122,27 @@
               <span>{{ stamp.thinking }}</span>
             </div>
           </div>
+          <h3 class="section-title">コメント</h3>
+          <ul class="comment-archive" v-if="comment.length > 0">
+            <li
+              class="comment-archive__item"
+              v-for="(commentDetail, index) in comment"
+              :key="index"
+            >
+              <div class="comment-archive__item-header">
+                <el-avatar icon="el-icon-user-solid"></el-avatar>
+              </div>
+              <div class="comment-archive__item-content">
+                <p>{{ commentDetail }}</p>
+              </div>
+            </li>
+          </ul>
           <div class="comment">
-            <h3 class="comment__title">コメントを投稿する</h3>
+            <div class="comment__header">
+              <div class="comment__avatar">
+                <el-avatar icon="el-icon-user-solid"></el-avatar>
+              </div>
+            </div>
             <div class="comment__content">
               <el-input
                 type="textarea"
@@ -132,14 +151,14 @@
                 v-model="fields.comment"
               >
               </el-input>
-            </div>
-            <div class="comment__buttons">
-              <el-button
-                type="primary"
-                @click="handleAddComment"
-                :disabled="!fields.comment || isAddingComment"
-                >投稿する</el-button
-              >
+              <div class="comment__buttons">
+                <el-button
+                  type="primary"
+                  @click="handleAddComment"
+                  :disabled="!fields.comment || isAddingComment"
+                  >投稿する</el-button
+                >
+              </div>
             </div>
           </div>
         </div>
@@ -157,17 +176,8 @@ import Vue from "vue";
 import dayjs from "dayjs";
 import Skeleton from "vue-loading-skeleton";
 import { createClient } from "@/lib/contentful";
-import nicojs from "nicojs";
 
 const client = createClient();
-
-const shuffle = ([...array]) => {
-  for (let i = array.length - 1; i >= 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-};
 
 Vue.use(Skeleton);
 
@@ -200,7 +210,6 @@ export default {
       isAddingRate: false,
       isAddingComment: false,
       isAddingStamp: false,
-      nico: null,
       get isAddedRate() {
         let addedRateArticles =
           JSON.parse(localStorage.getItem("addedRateArticles")) || [];
@@ -228,22 +237,6 @@ export default {
     },
     getArticle() {
       return client.getEntry(this.id);
-    },
-    handleOnResize() {
-      if (!window) return;
-      this.nico.resize(window.innerWidth, window.innerHeight);
-    },
-    initCommentArea() {
-      this.nico = new nicojs({
-        app: document.getElementById("comment-area"),
-        width: window.innerWidth,
-        height: window.innerHeight,
-        font_size: 50,
-        color: "#333"
-      });
-    },
-    updateCommentArea() {
-      this.nico.loop(shuffle(this.comment));
     },
     async handleAddRate() {
       this.isAddingRate = true;
@@ -301,7 +294,6 @@ export default {
           message: "コメントを追加しました!!",
           type: "success"
         });
-        this.fetchComment();
       } catch (err) {
         this.$message.error({
           message: err
@@ -372,7 +364,6 @@ export default {
         })
         .then(data => {
           this.comment = data;
-          this.updateCommentArea();
         })
         .catch(err => {
           console.log(err);
@@ -409,7 +400,6 @@ export default {
     this.isLoading = false;
   },
   mounted() {
-    this.initCommentArea();
     this.fetchRate();
     this.fetchComment();
     this.fetchStamp();
@@ -615,22 +605,47 @@ export default {
   }
 }
 
-.comment {
+.comment-archive {
   margin-top: 4rem;
+  list-style: none;
+  padding: 0;
+
+  &__item {
+    display: flex;
+
+    &-header {
+      margin-right: 2.4rem;
+    }
+
+    &-content {
+      flex: 1;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #dfdfdf;
+
+      p {
+        margin: 0;
+        color: #5c5c5c;
+        line-height: 1.65;
+      }
+    }
+  }
+}
+
+.comment {
+  margin-top: 2.8rem;
+  display: flex;
+
+  &__header {
+    margin-right: 2.4rem;
+  }
+
+  &__content {
+    flex: 1;
+  }
 
   &__buttons {
     margin-top: 2rem;
   }
-}
-
-.comment-area {
-  position: fixed !important;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1000;
-  pointer-events: none;
 }
 
 .stamp {
