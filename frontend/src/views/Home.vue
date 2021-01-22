@@ -7,7 +7,7 @@
         </el-col>
       </el-row>
     </template>
-    <template v-else-if="articles">
+    <template v-else-if="articles.length > 0">
       <el-row :gutter="40">
         <el-col
           :sm="12"
